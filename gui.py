@@ -99,7 +99,7 @@ def practice_window(kana_list, kana_dict, score=0, total=None):
 
     # exit to menu when answered all
     if len(kana_list) == 0:
-        main_menu(f"Your score is {score}/{score}")
+        main_menu(f"Your score is {score}/{total}")
         return
 
     clear_window()
