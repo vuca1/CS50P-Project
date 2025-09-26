@@ -176,7 +176,7 @@ def main():
 def game_init():
     """
     Initiate KANA practice puzzle game.
-    Returns str, either score in terminal version or success message in pdf version
+    Returns str, either score in terminal version or success message in pdf version.
 
     """
 
@@ -223,10 +223,10 @@ def game_init():
 
 def check_filename(filename, filetype):
     """
-    Return list where first item is True/False and second item is name of the file
+    Return list where first item is True/False and second item is name of the file.
 
-    filename - str, name of the file
-    filetype - str, file format (e.g., 'pdf', 'txt')
+    filename - str, name of the file.
+    filetype - str, file format (e.g., 'pdf', 'txt').
     """
 
     pattern = rf"^([\w\.\- ]+)\.{re.escape(filetype)}$"
@@ -237,19 +237,19 @@ def check_filename(filename, filetype):
     else:
         return [False]
 
-def generate_kana(chars, kana_dict, count=1):
+def generate_kana(char_per_phrase, kana_dict, phrases_num=1):
     """
-    Returns list of KANA characters
+    Returns list of KANA characters.
 
-    chars - int, number of characters to return
-    kana_dict - dict, dictionary with chosen kana
-    count - int, number of 'phrases' to return in a list (default=1)
+    char_per_phrase - int, number of characters to return.
+    kana_dict - dict, dictionary with chosen kana.
+    phrases_num - int, number of 'phrases' to return in a list (default=1).
     """
 
     characters = []
-    for _ in range(count):
+    for _ in range(phrases_num):
         phrase = ""
-        for _ in range(chars):
+        for _ in range(char_per_phrase):
             phrase += random.choice([key for key in kana_dict.keys()])
 
         characters.append(phrase)
@@ -258,10 +258,10 @@ def generate_kana(chars, kana_dict, count=1):
 
 def terminal_inquiry(kana_list, kana_dict):
     """
-    Returns count of correct answers
+    Returns count of correct answers.
 
-    kana_list - list, list with kana phrases
-    kana_dict - dict, dictionary with chosen kana
+    kana_list - list, list with kana phrases.
+    kana_dict - dict, dictionary with chosen kana.
     """
 
     score = 0
@@ -278,10 +278,10 @@ def terminal_inquiry(kana_list, kana_dict):
 
 def check_phrase(phrase, kana_dict):
     """
-    Returns true or false whether input corresponds with dict values
+    Returns true or false whether input corresponds with dict values.
 
-    phrase - str, str to check with
-    kana_dict - dict, dictionary with chosen kana
+    phrase - str, str to check with.
+    kana_dict - dict, dictionary with chosen kana.
     """
 
     guess = input(f"{phrase}: ")
@@ -292,10 +292,10 @@ def check_phrase(phrase, kana_dict):
 
 def kana_to_romaji(phrase, kana_dict):
     """
-    Returns phrase in romaji alphabate (classic alphabet)
+    Returns phrase in romaji alphabate (classic alphabet).
 
-    phrase - str, str to convert
-    kana_dict - dict, dictionary with chosen kana
+    phrase - str, str to convert.
+    kana_dict - dict, dictionary with chosen kana.
     """
 
     return "".join([kana_dict[char] for char in phrase])
@@ -303,12 +303,12 @@ def kana_to_romaji(phrase, kana_dict):
 
 def save_pdf(filename, kana_list, kana_dict, phrase_count):
     """
-    Saves a pdf with kana phrases, blank lines and answers at the bottom
+    Saves a pdf with kana phrases, blank lines and answers at the bottom.
 
-    filename - str, name of the saved file
-    kana_list - list, kana phrases to translate
-    kana_dict - dict, dictionary with chosen kana
-    phrases_count - int, number of phrases in the kana_list
+    filename - str, name of the saved file.
+    kana_list - list, kana phrases to translate.
+    kana_dict - dict, dictionary with chosen kana.
+    phrases_count - int, number of phrases in the kana_list.
     """
 
     # make sure file 'export' exist in the directory
@@ -381,10 +381,10 @@ def save_pdf(filename, kana_list, kana_dict, phrase_count):
 
 def get_pos_int(phrase="", maximum=60):
     """
-    Return a positive int from user's input
+    Return a positive int from user's input.
 
-    phrase - str, optional string to prompt user
-    maximum - int, optional maximum boundry
+    phrase - str, optional string to prompt user.
+    maximum - int, optional maximum boundry.
     """
 
     while True:
