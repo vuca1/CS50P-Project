@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from tkinter import messagebox
 from project import KANA_MAP, generate_kana, kana_to_romaji
 
 
@@ -38,6 +39,7 @@ def settings_window():
     tk.Label(frame_configure, text="How many phrases:").grid(row=0, column=0, padx=5, pady=5)
     entry_phrases = tk.Entry(frame_configure)
     entry_phrases.grid(row=0, column=1, padx=5, pady=2)
+    entry_phrases.focus()
 
     # characters count
     tk.Label(frame_configure, text="How many characters per phrase:").grid(row=1, column=0, padx=5, pady=5)
@@ -48,11 +50,37 @@ def settings_window():
     frame_option = tk.Frame(root)
     frame_option.pack(padx=5, pady=5)
 
-    #print(alphabet_var.get().upper())
-    kana_dict = KANA_MAP[alphabet_var.get().upper()]
+
+    def initiate_engine(mode):
+        MAX_PHRASES = 60
+        MAX_CHARACTERS = 5
+
+        # check valid numbers
+        try:
+            num_phrases = int(entry_phrases.get())
+            num_characters = int(entry_characters.get())
+            if num_phrases > MAX_PHRASES or num_phrases < 1:
+                raise ValueError
+            if num_characters > MAX_CHARACTERS or num_characters < 1:
+                raise ValueError
+        except ValueError:
+            messagebox.showerror("Invalid input", "Please enter positive number only!")
+            return
+        
+        # when valid:
+        kana_dict = KANA_MAP[alphabet_var.get().upper()]
+
+        if mode == 1:
+            practice_window(generate_kana(num_characters, kana_dict, num_phrases), kana_dict)
+        elif mode == 2:
+            print("pdf gen")
+            # TODO
+        else:
+            return
+
 
     # practice/pdf button
-    button_practice = tk.Button(frame_option, text="Start Practice", command=lambda: practice_window(generate_kana(int(entry_characters.get()), kana_dict, int(entry_phrases.get())), kana_dict))
+    button_practice = tk.Button(frame_option, text="Start Practice", command=lambda: initiate_engine(1))
     button_practice.grid(row=0, column=0, padx=5, pady=5)
     button_pdf = tk.Button(frame_option, text="Generate PDF", command=lambda: print("PDF beginning"))
     button_pdf.grid(row=0, column=1, padx=5, pady=5)
@@ -69,6 +97,7 @@ def practice_window(kana_list, kana_dict, score=0, total=None):
     # exit to menu when answered all
     if len(kana_list) == 0:
         main_menu(f"Your score is {score}/{score}")
+        return
 
     clear_window()
 
@@ -85,6 +114,7 @@ def practice_window(kana_list, kana_dict, score=0, total=None):
     tk.Label(frame_kana, text=" : ").grid(row=0, column=1, padx=5, pady=5)
     entry_answer = tk.Entry(frame_kana)
     entry_answer.grid(row=0, column=2, padx=5, pady=5)
+    entry_answer.focus()
 
     def check_and_next():
         user_input = entry_answer.get().strip().lower()
@@ -92,15 +122,16 @@ def practice_window(kana_list, kana_dict, score=0, total=None):
 
         if user_input == correct_answer:
             print("correct")
-            new_score = score
+            new_score = score + 1
         else:
-            print(f"incorrect | {current_kana} - {correct_answer}")
+            messagebox.showerror("Incorrect answer", f"incorrect | {current_kana} - {correct_answer}")
+            new_score = score
 
-    button_check = tk.Button(root, text="Check Answer", command=lambda: practice_window(kana_list[1:], kana_dict))
+        # move to next kana phrase
+        practice_window(kana_list[1:], kana_dict, new_score, total)
+
+    button_check = tk.Button(root, text="Check Answer", command=check_and_next)
     button_check.pack(pady=5)
-
-
-    
 
 
 def main_menu(info=""):
