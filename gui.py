@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from tkinter import messagebox
-from project import KANA_MAP, generate_kana, kana_to_romaji
+from project import KANA_MAP, generate_kana, kana_to_romaji, save_pdf
 
 
 # create window
@@ -74,15 +74,18 @@ def settings_window():
             practice_window(generate_kana(num_characters, kana_dict, num_phrases), kana_dict)
         elif mode == 2:
             print("pdf gen")
-            # TODO
+            save_pdf("kana_practive.pdf", generate_kana(num_characters, kana_dict, num_phrases), kana_dict, num_phrases)
+            # TODO: filename is hardcoded as well as filepath
+            messagebox.showinfo("Saved", "Succesfully generated kana_practice.pdf file")
         else:
-            return
+            messagebox.showerror("Error", "Something went wrong")
+            main_menu
 
 
     # practice/pdf button
     button_practice = tk.Button(frame_option, text="Start Practice", command=lambda: initiate_engine(1))
     button_practice.grid(row=0, column=0, padx=5, pady=5)
-    button_pdf = tk.Button(frame_option, text="Generate PDF", command=lambda: print("PDF beginning"))
+    button_pdf = tk.Button(frame_option, text="Generate PDF", command=lambda: initiate_engine(2))
     button_pdf.grid(row=0, column=1, padx=5, pady=5)
 
     # back to menu button
