@@ -46,6 +46,12 @@ project/<br>
 
 ---
 
+## Instructions
+- **Terminal Version:** Run `python project.py` from the project folder. Follow the on-screen instructions to practice KANA in the terminal.
+- **GUI Version:** Run `python gui.py` from the project folder. A KANA Practice window will appear, allowing you to practice via a graphical interface.
+
+---
+
 ## Design Decisions
 
 - **PDF Layout** – Exercises are split into pages/columns with answer lines at the bottom.  
