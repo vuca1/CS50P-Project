@@ -237,7 +237,7 @@ def check_filename(filename, filetype):
     if match:
         return [True, filename]
     else:
-        return [False]
+        return [False, filename]
 
 def generate_kana(char_per_phrase, kana_dict, phrases_num=1):
     """
@@ -247,6 +247,10 @@ def generate_kana(char_per_phrase, kana_dict, phrases_num=1):
     kana_dict - dict, dictionary with chosen kana.
     phrases_num - int, number of 'phrases' to return in a list (default=1).
     """
+
+    if kana_dict == None:
+        print("Empty dictionary")
+        raise ValueError("kana_dict is empty")
 
     characters = []
     for _ in range(phrases_num):
@@ -300,7 +304,7 @@ def kana_to_romaji(phrase, kana_dict):
     kana_dict - dict, dictionary with chosen kana.
     """
 
-    return "".join([kana_dict[char] for char in phrase])
+    return "".join([kana_dict.get(char, "?") for char in phrase])
 
 
 def save_pdf(filename, kana_list, kana_dict, phrase_count):
@@ -393,12 +397,11 @@ def get_pos_int(phrase="", maximum=60):
     while True:
         try:
             number = int(input(phrase))
-            if number > 0 and number <= maximum:
+            if 0 < number <= maximum:
                 return number
-            else:
-                print(f"Number must be between 1 and {maximum}")
+            print(f"Number must be between 1 and {maximum}")
         except ValueError:
-            pass
+            continue
 
 
 if __name__ == "__main__":

@@ -83,7 +83,7 @@ def settings_window():
             # check for correct filename format
             filename = check_filename(entry_filename.get(), "pdf")
             if not filename[0]:
-                messagebox.showerror("Invlaid filename", "Invalid filename. Valid format '<filename[a-z . _ -]>.pdf'")
+                messagebox.showerror("Invalid filename", "Invalid filename. Valid format '<filename[a-z . _ -]>.pdf'")
                 return
             save_pdf(filename[1], generate_kana(num_characters, kana_dict, num_phrases), kana_dict, num_phrases)
             # TODO: filepath is hardcoded
