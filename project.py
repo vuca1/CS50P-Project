@@ -217,8 +217,10 @@ def game_init():
 
     # save to pdf version
     else:
-        save_pdf(f"{checked[1]}", kana_list, kana_dict, number_of_phrases)
-        return f"|=>  beep beep... 'export/{checked[1]}' saved into files 🤖  <=|"
+        if save_pdf(f"{checked[1]}", kana_list, kana_dict, number_of_phrases):
+            return f"|=>  beep beep... 'export/{checked[1]}' saved into files 🤖  <=|"
+        else:
+            return "Something went wrong"
 
 
 def check_filename(filename, filetype):
@@ -319,7 +321,7 @@ def save_pdf(filename, kana_list, kana_dict, phrase_count):
         pdfmetrics.registerFont(TTFont("NotoSansJP", "static/NotoSansJP-Regular.ttf"))
     except (FileNotFoundError, TTFError):
         print("Couldn't find 'static/NotoSansJP-Regular.ttf' font.")
-        sys.exit(0)
+        return False
 
     # initiate reportLab engine
     page_width = 595
@@ -377,6 +379,7 @@ def save_pdf(filename, kana_list, kana_dict, phrase_count):
 
     # save pdf to files
     c.save()
+    return True
 
 
 def get_pos_int(phrase="", maximum=60):

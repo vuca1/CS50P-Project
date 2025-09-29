@@ -1,13 +1,15 @@
 import tkinter as tk
 
 from tkinter import messagebox
-from project import KANA_MAP, generate_kana, kana_to_romaji, save_pdf
+from project import KANA_MAP, generate_kana, kana_to_romaji, save_pdf, check_filename
 
 
 # create window
 root = tk.Tk()
-root.title("KANA Practice")
+root.title(" KANA Practice")
 root.geometry("400x300")
+root.resizable(False, False)
+root.iconbitmap("static/icon.ico")
 
 
 def clear_window():
@@ -25,7 +27,7 @@ def settings_window():
     # default radio button selection (alphabets)
     alphabet_var = tk.StringVar(value="HIRAGANA")
 
-    tk.Label(frame_alphabet, text="Choose alphabet:").grid(row=0, column=0, columnspan=2, pady=5)
+    tk.Label(frame_alphabet, text="Choose alphabet:", font=("Times-Roman", 12)).grid(row=0, column=0, columnspan=2, pady=5)
     button_hiragana = tk.Radiobutton(frame_alphabet, text="Hiragana",variable=alphabet_var, value="HIRAGANA")
     button_hiragana.grid(row=1, column=0, padx=10, pady=3)
     button_katakana = tk.Radiobutton(frame_alphabet, text="Katakana", variable=alphabet_var, value="KATAKANA")
@@ -46,6 +48,11 @@ def settings_window():
     entry_characters = tk.Entry(frame_configure)
     entry_characters.grid(row=1, column=1, padx=5, pady=5)
 
+    # filename for pdf file
+    tk.Label(frame_configure, text="Filename for PDF export:").grid(row=2, column=0, padx=5, pady=5)
+    entry_filename = tk.Entry(frame_configure)
+    entry_filename.grid(row=2, column=1, padx=5, pady=5)
+
     # frame practice / generate PDF
     frame_option = tk.Frame(root)
     frame_option.pack(padx=5, pady=5)
@@ -64,7 +71,7 @@ def settings_window():
             if num_characters > MAX_CHARACTERS or num_characters < 1:
                 raise ValueError
         except ValueError:
-            messagebox.showerror("Invalid input", "Please enter positive number only!")
+            messagebox.showerror("Invalid input", "Positive numbers only! Max phrases: 60 | Max characters: 5")
             return
         
         # when valid:
@@ -73,12 +80,16 @@ def settings_window():
         if mode == 1:
             practice_window(generate_kana(num_characters, kana_dict, num_phrases), kana_dict)
         elif mode == 2:
-            print("pdf gen")
-            save_pdf("kana_practive.pdf", generate_kana(num_characters, kana_dict, num_phrases), kana_dict, num_phrases)
-            # TODO: filename is hardcoded as well as filepath
-            messagebox.showinfo("Saved", "Succesfully generated kana_practice.pdf file")
+            # check for correct filename format
+            filename = check_filename(entry_filename.get(), "pdf")
+            if not filename[0]:
+                messagebox.showerror("Invlaid filename", "Invalid filename. Valid format '<filename[a-z . _ -]>.pdf'")
+                return
+            save_pdf(filename[1], generate_kana(num_characters, kana_dict, num_phrases), kana_dict, num_phrases)
+            # TODO: filepath is hardcoded
+            messagebox.showinfo("Saved", f"Succesfully generated {filename[1]} file and saved to export/")
         else:
-            messagebox.showerror("Error", "Something went wrong")
+            messagebox.showerror("Error", "Invalid input")
             main_menu
 
 
@@ -99,12 +110,12 @@ def practice_window(kana_list, kana_dict, score=0, total=None):
 
     # exit to menu when answered all
     if len(kana_list) == 0:
-        main_menu(f"Your score is {score}/{total}")
+        main_menu(f"Congratulations! 🎉 Your score is {score}/{total} 👏")
         return
 
     clear_window()
 
-    tk.Label(root, text="Convert KANA to Romaji").pack(pady=5)
+    tk.Label(root, text="Convert KANA to Romaji", font=("Times-Roman", 14)).pack(pady=15)
 
     # frame for convertion
     frame_kana = tk.Frame(root)
@@ -119,22 +130,30 @@ def practice_window(kana_list, kana_dict, score=0, total=None):
     entry_answer.grid(row=0, column=2, padx=5, pady=5)
     entry_answer.focus()
 
+    # label for correct/wrong message
+    label_result = tk.Label(root, text="", font=("Arial", 12))
+    label_result.pack(pady=10)
+
     def check_and_next():
         user_input = entry_answer.get().strip().lower()
         correct_answer = kana_to_romaji(current_kana, kana_dict)
 
         if user_input == correct_answer:
-            print("correct")
+            label_result.config(text="✅ Correct!", fg="green")
             new_score = score + 1
         else:
-            messagebox.showerror("Incorrect answer", f"incorrect | {current_kana} - {correct_answer}")
+            label_result.config(text=f"❌ Incorrect | {current_kana} - {correct_answer}", fg="red")
             new_score = score
 
-        # move to next kana phrase
-        practice_window(kana_list[1:], kana_dict, new_score, total)
+        # show result and move to next kana phrase
+        root.after(1500, lambda: practice_window(kana_list[1:], kana_dict, new_score, total))
 
+    # check answer and go to next one
     button_check = tk.Button(root, text="Check Answer", command=check_and_next)
     button_check.pack(pady=5)
+
+    # when pressing <return> -> call check_and_next() fun
+    root.bind("<Return>", lambda event: check_and_next())
 
 
 def main_menu(info=""):
@@ -150,7 +169,7 @@ def main_menu(info=""):
     button_exit = tk.Button(root, text="Exit", command=root.destroy)
     button_exit.pack(pady=5)
 
-    label_info = tk.Label(root, text=info, font=("Times-Roman", 9))
+    label_info = tk.Label(root, text=info, font=("Times-Roman", 12))
     label_info.pack(pady=20)
 
 
