@@ -1,8 +1,8 @@
 # KANA Practice
 
-#### Video Demo: <INSERT_YOUTUBE_URL_HERE>
+#### Video Demo:  [LINK](https://youtu.be/wTlnjrO-ikk?si=DBun59V6WuJLm4UQ) (https://youtu.be/wTlnjrO-ikk?si=DBun59V6WuJLm4UQ) # TODO
 
-### Description:
+#### Description:
 
 **KANA Practice** is a Python-based educational tool designed to help users learn and practice Japanese **Hiragana** and **Katakana** alphabets.  
 The program generates random sequences of KANA characters, challenges the user to write the corresponding romanized (**Romaji**) version, and optionally exports exercises as **PDF files**.  
