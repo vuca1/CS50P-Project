@@ -1,6 +1,6 @@
 # KANA Practice
 
-#### Video Demo:  [LINK](https://youtu.be/wTlnjrO-ikk?si=DBun59V6WuJLm4UQ) (https://youtu.be/wTlnjrO-ikk?si=DBun59V6WuJLm4UQ) # TODO
+#### Video Demo:  [LINK](https://youtu.be/BFJlVjYZBu0?si=pfH2v88_pgChNhBC) (https://youtu.be/BFJlVjYZBu0?si=pfH2v88_pgChNhBC)
 
 #### Description:
 
